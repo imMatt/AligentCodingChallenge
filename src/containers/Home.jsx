@@ -1,5 +1,5 @@
 import React from 'react';
-
+import EstablishmentSection from '../components/EstablishmentSection.jsx'
 export default class Home extends React.Component {
   constructor(props){
     super(props);
@@ -30,7 +30,12 @@ export default class Home extends React.Component {
 
   render() {
     return (
-      <p>Home</p>
+      <div>
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"></link>
+
+        <p>Home</p>
+        <EstablishmentSection></EstablishmentSection>
+      </div>
     );
   }
 }

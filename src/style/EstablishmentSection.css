@@ -1,0 +1,36 @@
+.esOuter {
+    max-width: 600px;
+    text-align: left;
+    border: 1px solid black;
+    
+}
+
+.esLabelledField {
+    margin-bottom:32px;
+}
+
+.esLabel { 
+    text-transform: uppercase;
+    font-size: 16px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.esValue {
+    font-size: 24px;
+    margin: 0;
+}
+
+.esOpenSpan {
+    background: #24c329;
+    color:white;
+
+    margin-left: 12px;
+    padding: 6px 12px 6px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
