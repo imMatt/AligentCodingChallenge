@@ -18,15 +18,20 @@ export default class extends React.Component {
                 "phone_numbers":"Unknown",
             }
         }
+    }
 
-        
+    componentWillReceiveProps(props){
+        this.setState({"id":props.id})
         fetch('https://developers.zomato.com/api/v2.1/restaurant?res_id=' + this.state.id, {
             headers: {
                 "user-key": config.zamatoKey
             }
         })
         .then(response => response.json())
-        .then(data => this.setState({ "data":data }));
+        .then(data => {
+            this.setState({ "data":data });
+            this.forceUpdate();
+        });
     }
 
     render(){

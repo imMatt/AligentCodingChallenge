@@ -37,6 +37,9 @@ export default class Home extends React.Component {
     .then(data => this.setState({ "establishments":data.restaurants }));
   }
 
+  setFocusedVenue(event){
+    this.setState({"currentID":event.target.getAttribute("venueID")})
+  }
 
   render() {
     return (
@@ -46,7 +49,7 @@ export default class Home extends React.Component {
           <h6 className="resultsLabel">Results</h6>
           <ul className="venueList">
             {this.state.establishments.map((venue) =>
-              <li>{venue.restaurant.name}</li>
+              <li onClick={this.setFocusedVenue.bind(this)} venueID={venue.restaurant.id}>{venue.restaurant.name}</li>
             )}            
           </ul>
         </div>
