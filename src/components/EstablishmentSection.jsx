@@ -7,10 +7,20 @@ import config from '../config.json';
 export default class extends React.Component {
     constructor(props){
         super(props);
-        this.state = {id:this.props.id, data:{}}
+        this.state = {id:this.props.id, 
+            data:{
+                "location":{
+                    "address":"Unknown"
+                },
+                "cuisines":"Unknown",
+                "has_table_booking":false,
+                "has_online_delivery":false,
+                "phone_numbers":"Unknown",
+            }
+        }
 
         
-        fetch('https://developers.zomato.com/api/v2.1/restaurant?res_id=16774318', {
+        fetch('https://developers.zomato.com/api/v2.1/restaurant?res_id=' + this.state.id, {
             headers: {
                 "user-key": config.zamatoKey
             }
@@ -23,7 +33,7 @@ export default class extends React.Component {
         return (
             <div className="esOuter">
                 <div className="esLeft">
-                    <img src="https://b.zmtcdn.com/data/res_imagery/16774318_RESTAURANT_fc526e8cfdc1cd8242c50298385d325c.JPG?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A"></img>
+                    <img src={this.state.data.thumb}></img>
                 </div>
 
                 <div className="esRight">

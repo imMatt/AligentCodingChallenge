@@ -1,10 +1,14 @@
 import React from 'react';
 import EstablishmentSection from '../components/EstablishmentSection.jsx'
+import '../style/MainSection.css'
+import config from '../config.json';
+
 export default class Home extends React.Component {
   constructor(props){
     super(props);
 
     this.state = {
+      currentID:18693142,
       city:-1,
       categories:[],
       cuisines:[],
@@ -22,19 +26,34 @@ export default class Home extends React.Component {
         }
       }
     };
+
+
+    fetch('https://developers.zomato.com/api/v2.1/search', {
+      headers: {
+          "user-key": config.zamatoKey
+      }
+    })
+    .then(response => response.json())
+    .then(data => this.setState({ "establishments":data.restaurants }));
   }
 
-  componentDidMount(){
-
-  }
 
   render() {
     return (
-      <div>
+      <div classname="main">
         <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"></link>
+        <div className="mainLeft">
+          <h6 className="resultsLabel">Results</h6>
+          <ul className="venueList">
+            {this.state.establishments.map((venue) =>
+              <li>{venue.restaurant.name}</li>
+            )}            
+          </ul>
+        </div>
 
-        <p>Home</p>
-        <EstablishmentSection id="aaa"></EstablishmentSection>
+        <div className="mainRight">
+          <EstablishmentSection id={this.state.currentID}></EstablishmentSection>
+        </div>
       </div>
     );
   }

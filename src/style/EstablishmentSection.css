@@ -1,6 +1,7 @@
 .esOuter {
     width:800px;
     text-align: left;    
+    padding:50px;
 }
 
 .esLabelledField {
@@ -44,7 +45,7 @@
 }
 
 .esLeft {
-    width:40%;
+    width:45%;
     float:left;
 }
 
@@ -53,7 +54,7 @@
 }
 
 .esRight {
-    width:calc(60% - 50px);
+    width:calc(55% - 50px);
     float:right;
     padding-left:50px;
 }

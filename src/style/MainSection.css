@@ -1,0 +1,54 @@
+.main {
+    max-height: 800px;
+}
+.mainLeft {
+    width:300px;
+    float:left;
+    background: #e5e5e5;
+
+    min-height: 780px;
+    max-height: 780px;
+
+    overflow-y: scroll;
+
+    border-right: 10px solid #e5e5e5;
+    border-top: 10px solid #e5e5e5;
+    border-bottom: 10px solid #e5e5e5;
+
+}
+
+.mainRight {
+    width:calc(100% - 310px);
+    float:right;
+
+    background: #f1f1f1;
+
+    min-height: 800px;
+    max-height: 800px;
+}
+
+.venueList {
+    padding-right: 20px;
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+
+.venueList > li {
+    text-align: left;
+    padding:15px 15px 15px 40px;
+    list-style: none;
+    border-top: 1px solid darkgray;
+}
+
+.venueList > li:hover {
+    background: #50bebf;
+    color:#eee;
+}
+
+.resultsLabel {
+    padding-left: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    text-align: left;
+}
