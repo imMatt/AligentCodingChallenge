@@ -34,7 +34,7 @@ export default class Home extends React.Component {
         <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"></link>
 
         <p>Home</p>
-        <EstablishmentSection></EstablishmentSection>
+        <EstablishmentSection id="aaa"></EstablishmentSection>
       </div>
     );
   }
