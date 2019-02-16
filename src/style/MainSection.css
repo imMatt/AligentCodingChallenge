@@ -2,6 +2,10 @@
     max-height: 800px;
 }
 
+.mainUpper {
+    padding:25px;
+}
+
 .mainLeft {
     width:300px;
     float:left;

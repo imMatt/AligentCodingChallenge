@@ -25,11 +25,14 @@ export default class Home extends React.Component {
           min:1,
           max:4
         }
-      }
+      },
+      lat:"0",
+      long:"0"
     };
 
     //we need to first grab the users city
     navigator.geolocation.getCurrentPosition((pos) => {
+      this.setState({"lat":pos.coords.latitude, "lon":pos.coords.longitude})
       this.updateListOfVenues({
         "lat": pos.coords.latitude,
         "lon": pos.coords.longitude
@@ -57,16 +60,79 @@ export default class Home extends React.Component {
       this.setState({ "establishments":data.restaurants })
       this.setState({"currentData":data.restaurants[0].restaurant})
     });
+
+    //get cats
+    fetch('https://developers.zomato.com/api/v2.1/categories' + query, {
+      headers: {
+          "user-key": config.zamatoKey
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      this.setState({ "categories":data.categories })
+    });
+
+    //get cats
+    fetch('https://developers.zomato.com/api/v2.1/cuisines' + query, {
+      headers: {
+          "user-key": config.zamatoKey
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      this.setState({ "cuisines":data.cuisines })
+    });
   }
 
   setFocusedVenue(event){
     this.setState({"currentData":this.state.establishments[event.target.getAttribute("venueIndex")].restaurant})
   }
 
+  updateFilters(event){
+    var fc = document.getElementsByName("filtersCats");
+    var c = "";
+
+    for(var i = 0; i < fc.length; i++){
+      if(fc[i].checked){
+        c += fc[i].value + ","
+      }
+    }
+
+    var fc2 = document.getElementsByName("filtersCuisines");
+    var c2 = "";
+
+    for(var i = 0; i < fc2.length; i++){
+      if(fc2[i].checked){
+        c2 += fc2[i].value + ","
+      }
+    }
+  
+    this.updateListOfVenues({
+      "lat": this.state.lat,
+      "lon": this.state.lon,
+      "category": c,
+      "cuisines":c2
+    });
+
+  }
+
   render() {
     var venueID = 0;
     return (
       <div classname="main">
+        <div className="mainUpper">
+          <h6>CATEGORY</h6>
+          {this.state.categories.map((c) =>
+            <p><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCats" value={c.categories.id}></input>{c.categories.name}</p>
+          )}
+
+          <h6>CUISINES</h6>
+          {this.state.cuisines.map((c) =>
+            <p><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>{c.cuisine.cuisine_name}</p>
+          )}
+        </div>
+
+
         <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"></link>
         <div className="mainLeft">
           <h6 className="resultsLabel">Results</h6>
