@@ -4,9 +4,9 @@ import styles from '../../style/EstablishmentSection.css';
 export default ({ label, value }) => (
   <span>
     {(value ?
-      <span className="trueTick">✔</span>
+      <span><span className="trueTick">✔</span> {label} Available</span>
     :
-      <span className="falseCross">✖</span>
+      <span><span className="falseCross">✖</span> No {label}</span>
     )}
   </span>
 )
