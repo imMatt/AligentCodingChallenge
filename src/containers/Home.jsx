@@ -20,6 +20,7 @@ export default class Home extends React.Component {
       categories:[],
       cuisines:[],
       establishments:[],
+      establishmentsFiltered:[],
       searchParameters:{
         category:"",
         cuisine:"",
@@ -43,10 +44,15 @@ export default class Home extends React.Component {
         "lat": pos.coords.latitude,
         "lon": pos.coords.longitude
       });
+
+      this.updateFilterList({
+        "lat": pos.coords.latitude,
+        "lon": pos.coords.longitude
+      });
     });
   }
 
-  updateListOfVenues(qs){
+  updateFilterList(qs){
     //build the parameter string to append to the end of fetch
     var query = "?";
     var k = "";
@@ -54,20 +60,7 @@ export default class Home extends React.Component {
       query += k + "=" + qs[k] + "&";
     }
 
-    console.log(qs)
-    fetch('https://developers.zomato.com/api/v2.1/search' + query, {
-      headers: {
-          "user-key": config.zamatoKey
-      },
-      qs: qs
-    })
-    .then(response => response.json())
-    .then(data => {
-      this.setState({ "establishments":data.restaurants })
-      this.setState({"currentData":data.restaurants[0].restaurant})
-      console.log(data.restaurants)
-    });
-
+    //get the data needed for the filter section 
     //get cats
     fetch('https://developers.zomato.com/api/v2.1/categories' + query, {
       headers: {
@@ -92,22 +85,90 @@ export default class Home extends React.Component {
     });
   }
 
+  updateListOfVenues(qs){
+    //build the parameter string to append to the end of fetch
+    var query = "?";
+    var k = "";
+    for(k in qs){
+      query += k + "=" + qs[k] + "&";
+    }
+
+    console.log(qs)
+    fetch('https://developers.zomato.com/api/v2.1/search' + query, {
+      headers: {
+          "user-key": config.zamatoKey
+      },
+      qs: qs
+    })
+    .then(response => response.json())
+    .then(data => {
+      this.setState({ 
+        "establishments":data.restaurants,
+        "establishmentsFiltered":data.restaurants,
+        "currentData":data.restaurants[0].restaurant,
+      })
+      console.log(data.restaurants)
+    });
+  }
+
   setFocusedVenue(event){
     this.setState({"currentData":this.state.establishments[event.target.getAttribute("venueIndex")].restaurant})
+  }
+
+  updateFiltersLocally(){
+    var filtered = [];
+    var results = this.state.establishments;
+
+    for(var i = 0; i < results.length; i++){
+      var result = results[i];
+      
+
+      var price = result.restaurant.price_range;
+      var min = this.state.searchParameters.cost.min;
+      var max = this.state.searchParameters.cost.max;
+
+      if(price >= min && result.restaurant.price_range <= max){
+        filtered.push(result);
+      }
+    }
+
+    console.log("lowered from " + results.length + " to " + filtered.length)
+
+    this.setState({"establishmentsFiltered": filtered})
   }
 
   updateRatingRange(values){
     var minRating = values[0];
     var maxRating = values[1];
     
-    console.log(minRating + ", " + maxRating)
+    this.setState(
+      {
+        searchParameters: {
+          rating: {
+            min: minRating,
+            max: maxRating
+          }
+        }
+      },
+      this.updateFiltersLocally()
+    )
   }
 
   updateCostRange(values){
     var minRating = values[0];
     var maxRating = values[1];
 
-    console.log(minRating + ", " + maxRating)
+    this.setState(
+      {
+        searchParameters: {
+          cost: {
+            min: minRating,
+            max: maxRating
+          }
+        }
+      }
+    ),
+    this.updateFiltersLocally()
   }
 
   updateFilters(event){
@@ -165,10 +226,10 @@ export default class Home extends React.Component {
             
             <div className="rangeSelectorsAside">
               <h6 className="filterLabel">Rating</h6>
-              <Range marks={["0", "","","","","5"]} onChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0,5]} min={0} max={5}/>
+              <Range marks={["0", "","","","","5"]} onAfterChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0,5]} min={0} max={5}/>
 
               <h6 style={{"padding-top":"20px"}} className="filterLabel">Cost</h6>
-              <Range marks={["$", "","","$$$$"]} onChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[0,3]} min={0} max={3}/>
+              <Range marks={["", "$","","","$$$$"]} onAfterChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[0,3]} min={1} max={4}/>
 
 
             </div>
@@ -181,7 +242,7 @@ export default class Home extends React.Component {
           <h6 className="resultsLabel">Results</h6>
           <ul className="venueList">
             {
-              this.state.establishments.map((venue) =>
+              this.state.establishmentsFiltered.map((venue) =>
               <li onClick={this.setFocusedVenue.bind(this)} venueID={venue.restaurant.id} venueIndex={venueID++}>{venue.restaurant.name}</li>
             )}            
           </ul>
