@@ -65,6 +65,7 @@ export default class Home extends React.Component {
     .then(data => {
       this.setState({ "establishments":data.restaurants })
       this.setState({"currentData":data.restaurants[0].restaurant})
+      console.log(data.restaurants)
     });
 
     //get cats
@@ -164,10 +165,10 @@ export default class Home extends React.Component {
             
             <div className="rangeSelectorsAside">
               <h6 className="filterLabel">Rating</h6>
-              <Range onChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0,5]} min={0} max={5}/>
+              <Range marks={["0", "","","","","5"]} onChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0,5]} min={0} max={5}/>
 
-              <h6 className="filterLabel">Cost</h6>
-              <Range onChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[1,4]} min={1} max={4}/>
+              <h6 style={{"padding-top":"20px"}} className="filterLabel">Cost</h6>
+              <Range marks={["$", "","","$$$$"]} onChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[0,3]} min={0} max={3}/>
 
 
             </div>
