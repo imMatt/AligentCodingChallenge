@@ -3,6 +3,12 @@ import EstablishmentSection from '../components/EstablishmentSection.jsx'
 import '../style/MainSection.css'
 import config from '../config.json';
 
+import Slider, { Range } from 'rc-slider';
+// We can just import Slider or Range to reduce bundle size
+// import Slider from 'rc-slider/lib/Slider';
+// import Range from 'rc-slider/lib/Range';
+import '../style/slider.css';
+
 export default class Home extends React.Component {
 
   constructor(props){
@@ -89,6 +95,20 @@ export default class Home extends React.Component {
     this.setState({"currentData":this.state.establishments[event.target.getAttribute("venueIndex")].restaurant})
   }
 
+  updateRatingRange(values){
+    var minRating = values[0];
+    var maxRating = values[1];
+    
+    console.log(minRating + ", " + maxRating)
+  }
+
+  updateCostRange(values){
+    var minRating = values[0];
+    var maxRating = values[1];
+
+    console.log(minRating + ", " + maxRating)
+  }
+
   updateFilters(event){
     var fc = document.getElementsByName("filtersCats");
     var c = "";
@@ -140,6 +160,16 @@ export default class Home extends React.Component {
                   <li><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>{c.cuisine.cuisine_name}</li>
                 )}
               </ul>
+            </div>
+            
+            <div className="rangeSelectorsAside">
+              <h6 className="filterLabel">Rating</h6>
+              <Range onChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0,5]} min={0} max={5}/>
+
+              <h6 className="filterLabel">Cost</h6>
+              <Range onChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[1,4]} min={1} max={4}/>
+
+
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@
 
 .mainUpperFlex {
     display: flex;
+    padding-left: 40px;
 }
 
 .mainLeft {
@@ -57,14 +58,16 @@
 
 .resultsLabel {
     padding-left: 40px;
+    margin-bottom: 0px;
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-weight: bold;
+    font-weight: 900;
     text-align: left;
 }
 
 .catList {
     display:inline-block;
+    padding-left: 0px;
 }
 
 .catList > li {
@@ -75,12 +78,12 @@
 
 .cuisineList {
     display:inline-block;
-    -moz-column-count: 4;
-    -moz-column-gap: 20px;
-    -webkit-column-count: 4;
-    -webkit-column-gap: 20px;
-    column-count: 4;
-    column-gap: 20px;
+    -moz-column-count: 3;
+    -moz-column-gap: 60px;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 60px;
+    column-count: 3;
+    column-gap: 60px;
 }
 
 .cuisineList > li {
@@ -90,14 +93,20 @@
 }
 
 .filterLabel {
-    margin-left: 40px;
     text-align: left;
     font-weight: 900;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
 }
 
 .filterList > li {
     padding-bottom: 10px;
+    padding-right: 40px;
+}
+
+.rangeSelectorsAside{
+    margin-left: 80px;
+    margin-top: 16px;
+    width: 100%;
 }
