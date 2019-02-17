@@ -69,7 +69,8 @@ export default class Home extends React.Component {
     })
     .then(response => response.json())
     .then(data => {
-      this.setState({ "categories":data.categories })
+      //we splice out the last 4 to match the UI provided - might need to clarify on this 
+      this.setState({ "categories":data.categories.splice(0,4)})
     });
 
     //get cats
@@ -80,7 +81,7 @@ export default class Home extends React.Component {
     })
     .then(response => response.json())
     .then(data => {
-      this.setState({ "cuisines":data.cuisines })
+      this.setState({ "cuisines":data.cuisines.splice(0,11) })
     });
   }
 
@@ -121,19 +122,30 @@ export default class Home extends React.Component {
     return (
       <div classname="main">
         <div className="mainUpper">
-          <h6>CATEGORY</h6>
-          {this.state.categories.map((c) =>
-            <p><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCats" value={c.categories.id}></input>{c.categories.name}</p>
-          )}
+          <div className="mainUpperFlex">
 
-          <h6>CUISINES</h6>
-          {this.state.cuisines.map((c) =>
-            <p><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>{c.cuisine.cuisine_name}</p>
-          )}
+            <div>
+              <h6 className="filterLabel">Category</h6>
+              <ul className="catList filterList">
+                {this.state.categories.map((c) =>
+                  <li><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCats" value={c.categories.id}></input>{c.categories.name}</li>
+                )}
+              </ul>
+            </div>
+
+            <div>
+              <h6 className="filterLabel">Cuisine</h6>
+              <ul className="cuisineList filterList">
+                {this.state.cuisines.map((c) =>
+                  <li><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>{c.cuisine.cuisine_name}</li>
+                )}
+              </ul>
+            </div>
+          </div>
         </div>
 
 
-        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"></link>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,900" rel="stylesheet"></link>
         <div className="mainLeft">
           <h6 className="resultsLabel">Results</h6>
           <ul className="venueList">

@@ -6,6 +6,10 @@
     padding:25px;
 }
 
+.mainUpperFlex {
+    display: flex;
+}
+
 .mainLeft {
     width:300px;
     float:left;
@@ -57,4 +61,43 @@
     letter-spacing: 2px;
     font-weight: bold;
     text-align: left;
+}
+
+.catList {
+    display:inline-block;
+}
+
+.catList > li {
+    text-align: left;
+    list-style: none;
+    white-space:nowrap;
+}
+
+.cuisineList {
+    display:inline-block;
+    -moz-column-count: 4;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 4;
+    -webkit-column-gap: 20px;
+    column-count: 4;
+    column-gap: 20px;
+}
+
+.cuisineList > li {
+    text-align: left;
+    list-style: none;
+    white-space:nowrap;
+}
+
+.filterLabel {
+    margin-left: 40px;
+    text-align: left;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0px;
+}
+
+.filterList > li {
+    padding-bottom: 10px;
 }
