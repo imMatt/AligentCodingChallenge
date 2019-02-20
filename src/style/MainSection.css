@@ -66,7 +66,6 @@
 }
 
 .catList {
-    display:inline-block;
     padding-left: 0px;
 }
 
@@ -77,19 +76,22 @@
 }
 
 .cuisineList {
-    display:inline-block;
     -moz-column-count: 3;
-    -moz-column-gap: 60px;
+    -moz-column-gap: 1em;
     -webkit-column-count: 3;
-    -webkit-column-gap: 60px;
+    -webkit-column-gap: 1em;
     column-count: 3;
-    column-gap: 60px;
+    column-gap: 1em;
 }
 
 .cuisineList > li {
     text-align: left;
     list-style: none;
     white-space:nowrap;
+}
+
+.filterLabelCuisine {
+    margin-left:40px;
 }
 
 .filterLabel {
@@ -102,12 +104,102 @@
 
 .filterList > li {
     padding-bottom: 10px;
-    padding-right: 40px;
+    padding-right: 1em;
 }
 
 .rangeSelectorsAside{
-    margin-left: 80px;
     margin-right: 40px; 
     margin-top: 16px;
+    margin-left: auto;
+
+    max-width: 400px;
     width: 100%;
 }
+
+  @media only screen and (max-width: 1200px) {
+    
+  }
+
+  @media only screen and (max-width: 900px) {
+    .mainRight {
+        min-height: 900px;
+        max-height: 900px;
+    }
+
+    .mainLeft {
+        min-height: 880px;
+        max-height: 880px;
+    }
+    
+    .mainUpperFlex {
+        padding-left: 0px;
+        flex-wrap: wrap;
+    }
+
+    .esOuter {
+        width:calc(100% - 100px);
+    }
+
+    .esLeft {
+        width: 100%;
+    }
+
+    .esLeft > img {
+        max-width: none;
+    }
+    
+    .esRight {
+        width:100%;
+        padding:none;
+        margin-top:20px;
+    }
+
+    .rangeSelectorsAside{
+        flex-wrap: wrap;
+        margin-left: 0px;
+        width:100%;
+        max-width: none;
+        margin-bottom:40px;
+    }
+  }
+
+  @media only screen and (max-width: 650px) {
+    .esLeft {
+        width: 100%;
+    }
+
+    .esRight {
+        width: 100%;
+    }
+
+    .mainLeft {
+        width:calc(100% - 10px);
+        max-height: 200px;
+        min-height: 0px;
+        margin-bottom: 40px;
+    }
+
+    .mainRight {
+        float:none;
+        width:100%;
+        max-height: none;
+    }
+
+
+    .cuisineList {
+        -moz-column-count: 2;
+        -moz-column-gap: 1em;
+        -webkit-column-count: 2;
+        -webkit-column-gap: 1em;
+        column-count: 2;
+        column-gap: 1em;
+    }
+
+    .filterLabelCuisine {
+        margin-left:0px;
+    }
+
+    .cuisineList {
+        padding-left:0px;
+    }
+  }

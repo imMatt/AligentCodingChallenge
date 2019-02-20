@@ -192,7 +192,7 @@ export default class Home extends React.Component {
     if(index === undefined){
       index = 0;
     }
-    
+
     var fc = document.getElementsByName("filtersCats");
     var c = "";
 
@@ -241,6 +241,7 @@ export default class Home extends React.Component {
         <div className="mainUpper">
           <div className="mainUpperFlex">
 
+            
             <div>
               <h6 className="filterLabel">Category</h6>
               <ul className="catList filterList">
@@ -251,7 +252,7 @@ export default class Home extends React.Component {
             </div>
 
             <div>
-              <h6 className="filterLabel">Cuisine</h6>
+              <h6 className="filterLabel filterLabelCuisine">Cuisine</h6>
               <ul className="cuisineList filterList">
                 {this.state.cuisines.map((c) =>
                   <li><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>{c.cuisine.cuisine_name}</li>

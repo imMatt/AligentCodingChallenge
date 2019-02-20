@@ -35,7 +35,11 @@ export default class extends React.Component {
                         <p><CrossTickField value={this.state.data.has_table_booking} label="Bookings"></CrossTickField></p> 
                         <p><CrossTickField value={this.state.data.has_online_delivery} label="Delivery"></CrossTickField></p>
 
-                        <LabelledField label="Phone Number" value={this.state.data.phone_numbers}></LabelledField>
+                        {(this.state.data.phone_numbers) ?
+                        <LabelledField label="Phone Number" value={this.state.data.phone_numbers}></LabelledField> 
+                        :
+                        null 
+                        }
                         <LabelledField label="Opening Hours" value="Today 6:30AM to 4PM" isOpen={true}></LabelledField>      
                     </div>  
                 </div>
