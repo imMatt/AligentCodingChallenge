@@ -125,7 +125,7 @@ export default class Home extends React.Component {
   }
 
   setFocusedVenue(event) {
-    this.setState({ "currentData": this.state.establishments[event.target.getAttribute("venueIndex")].restaurant })
+    this.setState({ "currentData": this.state.establishments[event.target.getAttribute("venueindex")].restaurant })
   }
 
   //Filter the results that need to be handled locally (Cost & Rating) - as the API doesn't have a way to filter by these
@@ -231,9 +231,9 @@ export default class Home extends React.Component {
   }
 
   render() {
-    var venueID = 0;
+    var venueid = 0;
     return (
-      <div classname="main">
+      <div className="main">
         <div className="mainUpper">
           <div className="mainUpperFlex">
 
@@ -241,7 +241,7 @@ export default class Home extends React.Component {
               <h6 className="filterLabel">Category</h6>
               <ul className="catList filterList">
                 {this.state.categories.map((c) =>
-                  <li>
+                  <li key={"filter_" + c.categories.id}>
                     <input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCats" value={c.categories.id}></input>
                     {c.categories.name}
                   </li>
@@ -253,7 +253,7 @@ export default class Home extends React.Component {
               <h6 className="filterLabel filterLabelCuisine">Cuisine</h6>
               <ul className="cuisineList filterList">
                 {this.state.cuisines.map((c) =>
-                  <li>
+                  <li key={"filter_" + c.cuisine.cuisine_id}>
                     <input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>
                     {c.cuisine.cuisine_name}
                   </li>
@@ -265,25 +265,26 @@ export default class Home extends React.Component {
               <h6 className="filterLabel">Rating</h6>
               <Range marks={["0", "", "", "", "", "5"]} onAfterChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0, 5]} min={0} max={5} />
 
-              <h6 style={{ "padding-top": "20px" }} className="filterLabel">Cost</h6>
+              <h6 className="filterLabel">Cost</h6>
               <Range marks={["", "$", "", "", "$$$$"]} onAfterChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[1, 4]} min={1} max={4} />
-
             </div>
           </div>
         </div>
 
-        <div className="mainLeft" ref="venueList">
-          <h6 className="resultsLabel">Results</h6>
-          <ul className="venueList">
-            {
-              this.state.establishmentsFiltered.map((venue) =>
-                <li onClick={this.setFocusedVenue.bind(this)} venueID={venue.restaurant.id} venueIndex={venueID++}>{venue.restaurant.name}</li>
-              )}
-          </ul>
-        </div>
+        <div>
+          <div className="mainLeft" ref="venueList">
+            <h6 className="resultsLabel">Results</h6>
+            <ul className="venueList">
+              {
+                this.state.establishmentsFiltered.map((venue) =>
+                  <li key={"venue_" + venue.restaurant.id} onClick={this.setFocusedVenue.bind(this)} venueid={venue.restaurant.id} venueindex={venueid++}>{venue.restaurant.name}</li>
+                )}
+            </ul>
+          </div>
 
-        <div className="mainRight">
-          <EstablishmentSection data={this.state.currentData}></EstablishmentSection>
+          <div className="mainRight">
+            <EstablishmentSection data={this.state.currentData}></EstablishmentSection>
+          </div>
         </div>
       </div>
     );
