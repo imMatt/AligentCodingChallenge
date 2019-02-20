@@ -2,25 +2,25 @@
     max-height: 800px;
 }
 
-.mainUpper {
-    padding:25px;
+.filterArea {
+    display: flex;
+    padding: 25px 40px 25px 40px;
 }
 
-.mainUpperFlex {
+.mainLower {
     display: flex;
-    padding-left: 40px;
 }
 
 .mainLeft {
-    width:300px;
-    float:left;
-    background: #e5e5e5;
 
-    min-height: 780px;
-    max-height: 780px;
+    background: #e5e5e5;
+    height:780px;
+    min-width: 300px;
 
     overflow-y: scroll;
 
+    /* 'hack' to give us the inset 
+    scrollbar as shown in the spec */    
     border-right: 10px solid #e5e5e5;
     border-top: 10px solid #e5e5e5;
     border-bottom: 10px solid #e5e5e5;
@@ -28,13 +28,9 @@
 }
 
 .mainRight {
-    width:calc(100% - 310px);
-    float:right;
-
     background: #f1f1f1;
-
-    min-height: 800px;
-    max-height: 800px;
+    flex-grow: 1;
+    height:800px;
 }
 
 .venueList {
@@ -45,6 +41,7 @@
 }
 
 .venueList > li {
+    color:#1a1a1a;
     text-align: left;
     padding:15px 15px 15px 40px;
     list-style: none;
@@ -116,11 +113,7 @@
     width: 100%;
 }
 
-  @media only screen and (max-width: 1200px) {
-    
-  }
-
-  @media only screen and (max-width: 900px) {
+@media only screen and (max-width: 900px) {
     .mainRight {
         min-height: 900px;
         max-height: 900px;
@@ -130,28 +123,9 @@
         min-height: 880px;
         max-height: 880px;
     }
-    
-    .mainUpperFlex {
-        padding-left: 0px;
+
+    .filterArea {
         flex-wrap: wrap;
-    }
-
-    .esOuter {
-        width:calc(100% - 100px);
-    }
-
-    .esLeft {
-        width: 100%;
-    }
-
-    .esLeft > img {
-        max-width: none;
-    }
-    
-    .esRight {
-        width:100%;
-        padding:0;
-        margin-top:20px;
     }
 
     .rangeSelectorsAside{
@@ -161,47 +135,41 @@
         max-width: none;
         margin-bottom:40px;
     }
-  }
+}
 
-  @media only screen and (max-width: 650px) {
-    .esLeft {
-        width: 100%;
-        float:none;
-    }
-
-    .esRight {
-        width: 100%;
-        float:none;
-    }
-
-    .mainLeft {
-        width:calc(100% - 10px);
-        max-height: 200px;
-        min-height: 0px;
-        margin-bottom: 40px;
-    }
-
-    .mainRight {
-        float:none;
-        width:100%;
-        max-height: none;
-    }
+@media only screen and (max-width: 650px) {
 
 
-    .cuisineList {
-        -moz-column-count: 2;
-        -moz-column-gap: 1em;
-        -webkit-column-count: 2;
-        -webkit-column-gap: 1em;
-        column-count: 2;
-        column-gap: 1em;
-    }
+.mainLeft {
+    width:calc(100% - 10px);
+    max-height: 200px;
+    min-height: 0px;
+    margin-bottom: 40px;
+}
 
-    .filterLabelCuisine {
-        margin-left:0px;
-    }
+.mainRight {
+    width:100%;
+    max-height: none;
+}
 
-    .cuisineList {
-        padding-left:0px;
-    }
-  }
+.mainLower {
+    display: inline;
+}
+
+.cuisineList {
+    -moz-column-count: 2;
+    -moz-column-gap: 1em;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 1em;
+    column-count: 2;
+    column-gap: 1em;
+}
+
+.filterLabelCuisine {
+    margin-left:0px;
+}
+
+.cuisineList {
+    padding-left:0px;
+}
+}

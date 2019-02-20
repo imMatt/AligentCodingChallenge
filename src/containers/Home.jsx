@@ -234,50 +234,50 @@ export default class Home extends React.Component {
     var venueid = 0;
     return (
       <div className="main">
-        <div className="mainUpper">
-          <div className="mainUpperFlex">
+        <div className="filterArea">
 
-            <div>
-              <h6 className="filterLabel">Category</h6>
-              <ul className="catList filterList">
-                {this.state.categories.map((c) =>
-                  <li key={"filter_" + c.categories.id}>
-                    <input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCats" value={c.categories.id}></input>
-                    {c.categories.name}
-                  </li>
-                )}
-              </ul>
-            </div>
+          <div>
+            <h6 className="filterLabel">Category</h6>
+            <ul className="catList filterList">
+              {this.state.categories.map((c) =>
+                <li key={"filter_" + c.categories.id}>
+                  <input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCats" value={c.categories.id}></input>
+                  {c.categories.name}
+                </li>
+              )}
+            </ul>
+          </div>
 
-            <div>
-              <h6 className="filterLabel filterLabelCuisine">Cuisine</h6>
-              <ul className="cuisineList filterList">
-                {this.state.cuisines.map((c) =>
-                  <li key={"filter_" + c.cuisine.cuisine_id}>
-                    <input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>
-                    {c.cuisine.cuisine_name}
-                  </li>
-                )}
-              </ul>
-            </div>
+          <div>
+            <h6 className="filterLabel filterLabelCuisine">Cuisine</h6>
+            <ul className="cuisineList filterList">
+              {this.state.cuisines.map((c) =>
+                <li key={"filter_" + c.cuisine.cuisine_id}>
+                  <input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>
+                  {c.cuisine.cuisine_name}
+                </li>
+              )}
+            </ul>
+          </div>
 
-            <div className="rangeSelectorsAside">
-              <h6 className="filterLabel">Rating</h6>
-              <Range marks={["0", "", "", "", "", "5"]} onAfterChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0, 5]} min={0} max={5} />
+          <div className="rangeSelectorsAside">
+            <h6 className="filterLabel">Rating</h6>
+            <Range marks={["0", "", "", "", "", "5"]} onAfterChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0, 5]} min={0} max={5} />
 
-              <h6 className="filterLabel">Cost</h6>
-              <Range marks={["", "$", "", "", "$$$$"]} onAfterChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[1, 4]} min={1} max={4} />
-            </div>
+            <h6 className="filterLabel">Cost</h6>
+            <Range marks={["", "$", "", "", "$$$$"]} onAfterChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[1, 4]} min={1} max={4} />
           </div>
         </div>
 
-        <div>
+        <div className="mainLower">
           <div className="mainLeft" ref="venueList">
             <h6 className="resultsLabel">Results</h6>
             <ul className="venueList">
               {
                 this.state.establishmentsFiltered.map((venue) =>
-                  <li key={"venue_" + venue.restaurant.id} onClick={this.setFocusedVenue.bind(this)} venueid={venue.restaurant.id} venueindex={venueid++}>{venue.restaurant.name}</li>
+                  <li key={"venue_" + venue.restaurant.id} onClick={this.setFocusedVenue.bind(this)} venueid={venue.restaurant.id} venueindex={venueid++}>
+                    <p>{venue.restaurant.name}</p>
+                  </li>
                 )}
             </ul>
           </div>
