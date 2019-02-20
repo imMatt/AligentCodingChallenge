@@ -7,9 +7,6 @@ import '../style/MainSection.css'
 import config from '../config.json';
 
 import Slider, { Range } from 'rc-slider';
-// We can just import Slider or Range to reduce bundle size
-// import Slider from 'rc-slider/lib/Slider';
-// import Range from 'rc-slider/lib/Range';
 import '../style/slider.css';
 
 export default class Home extends React.Component {
@@ -45,20 +42,20 @@ export default class Home extends React.Component {
     //we need to first grab the users city to be able to provide relevant search results
     navigator.geolocation.getCurrentPosition((pos) => {
       this.setState({ "lat": pos.coords.latitude, "lon": pos.coords.longitude })
-      this.updateListOfVenues({
+      this.getListOfVenuesFromAPI({
         "lat": pos.coords.latitude,
         "lon": pos.coords.longitude
       }, 0);
 
       //grab the list of cuisines and categories around the users location
-      this.updateFilterList({
+      this.getFilterOptionsFromAPI({
         "lat": pos.coords.latitude,
         "lon": pos.coords.longitude
       });
     });
   }
 
-  updateFilterList(qs) {
+  getFilterOptionsFromAPI(qs) {
     //build the parameter string to append to the end of fetch
     var query = "?";
     var k = "";
@@ -91,28 +88,27 @@ export default class Home extends React.Component {
       });
   }
 
-  updateListOfVenues(qs, index) {
+  getListOfVenuesFromAPI(queryObject, firstResultIndex) {
     //append index param
-    qs.start = index;
+    queryObject.start = firstResultIndex;
 
-    this.setState({ "cIndex": index })
+    this.setState({ "cIndex": firstResultIndex })
 
     //build the parameter string to append to the end of fetch
-    var query = "?";
+    var queryString = "?";
     var k = "";
-    for (k in qs) {
-      query += k + "=" + qs[k] + "&";
+    for (k in queryObject) {
+      queryString += k + "=" + queryObject[k] + "&";
     }
 
-    fetch('https://developers.zomato.com/api/v2.1/search' + query, {
+    fetch('https://developers.zomato.com/api/v2.1/search' + queryString, {
       headers: {
         "user-key": config.zamatoKey
-      },
-      qs: qs
+      }
     })
       .then(response => response.json())
       .then(data => {
-        if (index == 0) {
+        if (firstResultIndex == 0) {
           this.setState({
             "establishments": data.restaurants,
             "establishmentsFiltered": data.restaurants,
@@ -132,89 +128,89 @@ export default class Home extends React.Component {
     this.setState({ "currentData": this.state.establishments[event.target.getAttribute("venueIndex")].restaurant })
   }
 
+  //Filter the results that need to be handled locally (Cost & Rating) - as the API doesn't have a way to filter by these
   updateFiltersLocally() {
     var filtered = [];
     var results = this.state.establishments;
 
-    var min = this.state.searchParameters.cost.min;
-    var max = this.state.searchParameters.cost.max;
+    var fCost = this.state.searchParameters.cost;
+    var fRating = this.state.searchParameters.rating;
 
     for (var i = 0; i < results.length; i++) {
       var result = results[i];
+      
       var price = result.restaurant.price_range;
+      var rating = result.restaurant.user_rating.aggregate_rating; 
 
-      if (price >= min && result.restaurant.price_range <= max) {
-        filtered.push(result);
+      //check price is within range
+      if (price >= fCost.min && result.restaurant.price_range <= fCost.max) {
+        if(rating >= fRating.min && rating <= fRating.max){
+          filtered.push(result);
+        }
       }
     }
-
-    console.log("lowered from " + results.length + " to " + filtered.length)
 
     this.setState({ "establishmentsFiltered": filtered })
   }
 
+  //Map the range values to the state and re-run the local filters
   updateRatingRange(values) {
     var minRating = values[0];
     var maxRating = values[1];
 
+    var searchParams = this.state.searchParameters;
+    searchParams.rating.min = minRating;
+    searchParams.rating.max = maxRating;
+
     this.setState(
       {
-        searchParameters: {
-          rating: {
-            min: minRating,
-            max: maxRating
-          }
-        }
+        searchParameters: searchParams
       },
       this.updateFiltersLocally
     )
   }
 
+  //Map the range values to the state and re-run the local filters
   updateCostRange(values) {
     var minRating = values[0];
     var maxRating = values[1];
 
+    var searchParams = this.state.searchParameters;
+    searchParams.cost.min = minRating;
+    searchParams.cost.max = maxRating;
+
     this.setState(
       {
-        searchParameters: {
-          cost: {
-            min: minRating,
-            max: maxRating
-          }
-        }
+        searchParameters: searchParams
       },
       this.updateFiltersLocally
     )
   }
 
+  getFilterString(name){
+    var filterElements = document.getElementsByName(name);
+    var filterString = "";
+
+    for (var i = 0; i < filterElements.length; i++) {
+      if (filterElements[i].checked) {
+        filterString += filterElements[i].value + ","
+      }
+    }
+    
+    return filterString;
+  }
+
   updateFilters(event, index) {
+    //if index is undefined default it to 0;
     if(index === undefined){
       index = 0;
     }
 
-    var fc = document.getElementsByName("filtersCats");
-    var c = "";
-
-    for (var i = 0; i < fc.length; i++) {
-      if (fc[i].checked) {
-        c += fc[i].value + ","
-      }
-    }
-
-    var fc2 = document.getElementsByName("filtersCuisines");
-    var c2 = "";
-
-    for (var i = 0; i < fc2.length; i++) {
-      if (fc2[i].checked) {
-        c2 += fc2[i].value + ","
-      }
-    }
-
-    this.updateListOfVenues({
+    this.getListOfVenuesFromAPI({
       "lat": this.state.lat,
       "lon": this.state.lon,
-      "category": c,
-      "cuisines": c2
+      "category": this.getFilterString("filtersCats"),
+      "cuisines": this.getFilterString("filtersCuisines")
     }, index);
 
   }
@@ -225,8 +221,9 @@ export default class Home extends React.Component {
       var obj = event.target;
       var dist = (obj.scrollHeight - obj.offsetHeight) - obj.scrollTop;
 
+      //while scrolling check if less than 50px from bottom,
+      //if so then we should populate some more results
       if (dist <= 50 && !this.state.loadingMore) {
-        console.log("BANGO")
         this.setState({ "loadingMore": true });
         this.updateFilters(null, this.state.cIndex + 20);
       }
@@ -240,12 +237,14 @@ export default class Home extends React.Component {
         <div className="mainUpper">
           <div className="mainUpperFlex">
 
-            
             <div>
               <h6 className="filterLabel">Category</h6>
               <ul className="catList filterList">
                 {this.state.categories.map((c) =>
-                  <li><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCats" value={c.categories.id}></input>{c.categories.name}</li>
+                  <li>
+                    <input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCats" value={c.categories.id}></input>
+                    {c.categories.name}
+                  </li>
                 )}
               </ul>
             </div>
@@ -254,7 +253,10 @@ export default class Home extends React.Component {
               <h6 className="filterLabel filterLabelCuisine">Cuisine</h6>
               <ul className="cuisineList filterList">
                 {this.state.cuisines.map((c) =>
-                  <li><input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>{c.cuisine.cuisine_name}</li>
+                  <li>
+                    <input onChange={this.updateFilters.bind(this)} type="checkbox" name="filtersCuisines" value={c.cuisine.cuisine_id}></input>
+                    {c.cuisine.cuisine_name}
+                  </li>
                 )}
               </ul>
             </div>
@@ -265,7 +267,6 @@ export default class Home extends React.Component {
 
               <h6 style={{ "padding-top": "20px" }} className="filterLabel">Cost</h6>
               <Range marks={["", "$", "", "", "$$$$"]} onAfterChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[1, 4]} min={1} max={4} />
-
 
             </div>
           </div>
