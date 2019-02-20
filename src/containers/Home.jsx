@@ -42,7 +42,7 @@ export default class Home extends React.Component {
       loadingMore: false
     };
 
-    //we need to first grab the users city
+    //we need to first grab the users city to be able to provide relevant search results
     navigator.geolocation.getCurrentPosition((pos) => {
       this.setState({ "lat": pos.coords.latitude, "lon": pos.coords.longitude })
       this.updateListOfVenues({
@@ -50,6 +50,7 @@ export default class Home extends React.Component {
         "lon": pos.coords.longitude
       }, 0);
 
+      //grab the list of cuisines and categories around the users location
       this.updateFilterList({
         "lat": pos.coords.latitude,
         "lon": pos.coords.longitude
@@ -122,8 +123,7 @@ export default class Home extends React.Component {
           es = es.concat(data.restaurants);
 
 
-          this.setState({"loadingMore": false, "establishments": es });
-          this.updateFiltersLocally();
+          this.setState({"loadingMore": false, "establishments": es }, this.updateFiltersLocally());
         }
       });
   }
@@ -136,13 +136,12 @@ export default class Home extends React.Component {
     var filtered = [];
     var results = this.state.establishments;
 
+    var min = this.state.searchParameters.cost.min;
+    var max = this.state.searchParameters.cost.max;
+
     for (var i = 0; i < results.length; i++) {
       var result = results[i];
-
-
       var price = result.restaurant.price_range;
-      var min = this.state.searchParameters.cost.min;
-      var max = this.state.searchParameters.cost.max;
 
       if (price >= min && result.restaurant.price_range <= max) {
         filtered.push(result);
@@ -167,7 +166,7 @@ export default class Home extends React.Component {
           }
         }
       },
-      this.updateFiltersLocally()
+      this.updateFiltersLocally
     )
   }
 
@@ -183,9 +182,9 @@ export default class Home extends React.Component {
             max: maxRating
           }
         }
-      }
-    ),
-      this.updateFiltersLocally()
+      },
+      this.updateFiltersLocally
+    )
   }
 
   updateFilters(event, index) {
@@ -265,15 +264,13 @@ export default class Home extends React.Component {
               <Range marks={["0", "", "", "", "", "5"]} onAfterChange={this.updateRatingRange.bind(this)} className="rangeSelector" defaultValue={[0, 5]} min={0} max={5} />
 
               <h6 style={{ "padding-top": "20px" }} className="filterLabel">Cost</h6>
-              <Range marks={["", "$", "", "", "$$$$"]} onAfterChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[0, 3]} min={1} max={4} />
+              <Range marks={["", "$", "", "", "$$$$"]} onAfterChange={this.updateCostRange.bind(this)} className="rangeSelector" defaultValue={[1, 4]} min={1} max={4} />
 
 
             </div>
           </div>
         </div>
 
-
-        <link href="https://fonts.googleapis.com/css?family=Lato:400,900" rel="stylesheet"></link>
         <div className="mainLeft" ref="venueList">
           <h6 className="resultsLabel">Results</h6>
           <ul className="venueList">
